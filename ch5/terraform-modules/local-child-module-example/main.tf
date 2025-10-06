@@ -19,31 +19,10 @@ module "security_group" {
   to_port             = "22"
 }
 
-### USING DATASOURCE TO GET THE LATEST AMI ###
-data "aws_ami" "root_module_ami" {
-  most_recent = true
-  owners      = ["amazon"]
-
-  filter {
-    name   = "name"
-    values = ["amzn2-ami-hvm-*-gp2"]
-  }
-
-  filter {
-    name   = "root-device-type"
-    values = ["ebs"]
-  }
-
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
-}
-
 ### LAUNCHING AN EC2 INSTANCE ###
 module "ec2_instance" {
   source                 = "./modules/ec2"
-  instance_ami           = data.aws_ami.root_module_ami.id
+  instance_ami           = "ami-052064a798f08f0d3"
   instance_type          = "t3.micro"
   root_volume_size       = 11
   subnet_id              = module.vpc.subnet_id
